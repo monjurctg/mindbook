@@ -1,9 +1,27 @@
 const express = require("express");
+require("dotenv").config();
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
-const { addUser } = require('./controlers/userControler');
-const userRouter = require('./routes/userRoutes')
+const { addUser } = require("./controlers/userControler");
+const userRouter = require("./routes/userRoutes");
+const http = require("http");
+const path = require("path");
+const expressServer = http.createServer(app);
+const { Server } = require("socket.io");
+const { Socket } = require("dgram");
+const { message } = require("statuses");
+const { JWT_SECRET } = require("./controlers/variables");
+
+
+const io = new Server(expressServer);
+
+const PORT = process.env.PORT || 5000;
+const ORIGIN = process.env.ORIGIN || `http://localhost:${PORT}`;
+
+
+
+
 
 // parse requests of content-type - application/json
 app.use(express.json());
@@ -25,15 +43,14 @@ mongoose
     process.exit();
   });
 app.get("/", (req, res) => {
-  res.send(`
-      <h1 style = "text-align: center; color:green">Server Run successfully</h1>
-      `);
+  res.sendFile(__dirname + "/index.html");
 });
 // route setup
-app.use('/users',userRouter)
+app.use("/api/auth", userRouter);
 
 // set port, listen for requests
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}.`);
+
+expressServer.listen(PORT, () => {
+  console.log(JWT_SECRET)
+  console.log(`Server is running on. http://localhost:${PORT}`);
 });

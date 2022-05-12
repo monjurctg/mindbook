@@ -1,8 +1,9 @@
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 const userModel = require("../models/user");
-const jwt = require("jsonwebtoken")
-const  JWT_SECRET = "dfjkdjfkjfdnmxjd#$#%$^#83728fddfjdjfkjdkfjddfjkdjfkdderiuwls"
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("./variables");
+
 
 // add a user
 
@@ -35,13 +36,17 @@ async function addUser(req, res, next) {
 
   try {
     const result = await newUser.save();
+     result.password=""
+    
     res.status(200).json({
         status:"sucess",
       message: "user add successfully",
+      user:result
+   
     });
   } catch (err) {
     if(err.code ===11000){
-      return res.json({status:"error",errors:"duplicate ",message:"username or email already exist"})
+      return res.status(500).json({status:"error",errors:"duplicate ",message:"username or email already exist"})
     }
 
     
@@ -50,10 +55,23 @@ async function addUser(req, res, next) {
     });
   }
 }
+
+async function getUsers(req, res)  {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
+    res.json({ user });
+  } catch (error) {
+    console.log(error.message);
+    res.send(500).json({ message: "server error" });
+  }
+}
 // login function
 async function loginUser(req,res,next){
   const {username,password}=req.body
-  const user = await User.findOne({username}).lean()
+  console.log(username)
+  const user = await User.findOne({username})
+  delete user.password
+  console.log(user)
   if(!user){
     return res.status(500).json({status:"error",message:"inviled username or password"})
   }
@@ -61,19 +79,55 @@ async function loginUser(req,res,next){
     const token = jwt.sign({
       id:user._id,
       username:username
-    },JWT_SECRET)
+    },`${JWT_SECRET}`)
 
-    return res.status(200).json({status:"ok",token:token})
+user.password=""
+    return res.status(200).json({status:"ok",token:token,user})
   }
   else{
     return res.status(500).json({status:"error",error:"inviled username or password"})
   }
  
 }
+
+async function setAvatar(req,res){
+
+  try{
+
+    const userId = req.params.id
+    console.log("api hitting setAvatar",userId)
+    const avatarImage = req.body.image
+    const userData = await User.findByIdAndUpdate(userId,{
+      isAvatarImage:true,
+      avatarImage
+    })
+    return res.status(200).json({
+      isSet:userData.isAvatarImage,image:userData.avatarImage
+    })
+  }catch(err){
+    return res.status(500).json(err)
+
+  }
+}
+async function getAlluser(req,res){
+
+  try{
+    const users = await User.find({_id:{  $ne:req.params.id}}).select([
+      "email","username","avatarImage","_id"
+    ])
+    console.log("req",users)
+
+    return res.json({users})
+
+  }catch(err){
+    return res.status(500).json({msg:"somting wrong"})
+
+  }
+}
 async function changePassword(req,res,next){
   const {token,password} = req.body
   try{
-    const user = await jwt.verify(token,JWT_SECRET)
+    const user = await jwt.verify(token,`${JWT_SECRET}`)
     const newHashPassword = await bcrypt.hash(password,10)
     const {_id}=user.id
     await User.updateOne({_id},{$set:{password:newHashPassword}})
@@ -87,5 +141,8 @@ async function changePassword(req,res,next){
 module.exports = {
   addUser,
   loginUser,
-  changePassword
+  changePassword,
+  getUsers,
+  setAvatar,
+  getAlluser
 };

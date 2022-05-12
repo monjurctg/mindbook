@@ -16,6 +16,14 @@ const userSchema = Schema({
         type:String,
         required:true
     },
+    isAvatarImage:{
+        type:Boolean,
+        default:false
+    },
+    avatarImage:{
+        type:String,
+        default:""
+    }
     // gender: {
     //     type: String,
     //     required:true
