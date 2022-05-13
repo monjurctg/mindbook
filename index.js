@@ -33,7 +33,7 @@ app.use(express.urlencoded({ extended: true }));
 const uri = "mongodb+srv://chatApp:monjur123@cluster0.pvcyw.mongodb.net/Chat-App?retryWrites=true&w=majority";
 
 mongoose
-  .connect("uri", {
+  .connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
