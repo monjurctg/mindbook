@@ -30,8 +30,10 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 // simple route
 
+const uri = "mongodb+srv://chatApp:monjur123@cluster0.pvcyw.mongodb.net/Chat-App?retryWrites=true&w=majority";
+
 mongoose
-  .connect("mongodb://localhost:27017/myapp", {
+  .connect("uri", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
