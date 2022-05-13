@@ -8,7 +8,7 @@ const { JWT_SECRET } = require("./variables");
 // add a user
 
 async function addUser(req, res, next) {
-  console.log(req.body);
+  // console.log(req.body);
   const {username,email,password}= req.body
   if(!username || typeof username !=="string"){
     return res.json({status:"error",message:"username is empty "})
@@ -68,10 +68,10 @@ async function getUsers(req, res)  {
 // login function
 async function loginUser(req,res,next){
   const {username,password}=req.body
-  console.log(username)
+  // console.log(username)
   const user = await User.findOne({username})
-  delete user.password
-  console.log(user)
+  // delete user.password
+  // console.log(user)
   if(!user){
     return res.status(500).json({status:"error",message:"inviled username or password"})
   }
@@ -95,7 +95,7 @@ async function setAvatar(req,res){
   try{
 
     const userId = req.params.id
-    console.log("api hitting setAvatar",userId)
+    // console.log("api hitting setAvatar",userId)
     const avatarImage = req.body.image
     const userData = await User.findByIdAndUpdate(userId,{
       isAvatarImage:true,
@@ -115,7 +115,7 @@ async function getAlluser(req,res){
     const users = await User.find({_id:{  $ne:req.params.id}}).select([
       "email","username","avatarImage","_id"
     ])
-    console.log("req",users)
+    // console.log("req",users)
 
     return res.json({users})
 
