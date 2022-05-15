@@ -56,7 +56,8 @@ const server = app.listen(PORT, () => {
 
 const io = socket(server, {
   cors: {
-    origin: ORIGIN?ORIGIN:'https://chaat-app.netlify.app/',
+    origin: ORIGIN,
+    // https://chaat-app.netlify.app/',
     Credential: true,
   },
 });
@@ -70,10 +71,12 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-msg", (data) => {
+      console.log(data, "onkdfkdj");
+
     const sendUserSocket = onlineUsers.get(data.to);
-    console.log(onlineUsers, "onkdfkdj");
+  
     if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recive", data.msg);
+      socket.to(sendUserSocket).emit("msg-recive", data.message);
     }
   });
 });
