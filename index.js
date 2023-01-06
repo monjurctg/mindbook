@@ -3,9 +3,10 @@ require("dotenv").config();
 const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
-const { addUser } = require("./controlers/userControler");
+const {addUser} = require("./controlers/userControler");
 const userRouter = require("./routes/userRoutes");
 const messageRouter = require("./routes/messagesRoute");
+const friendsRouter = require("./routes/friends");
 
 // const expressServer = http.createServer(app);
 const socket = require("socket.io");
@@ -18,21 +19,27 @@ const socket = require("socket.io");
 const PORT = process.env.PORT || 5000;
 const ORIGIN = process.env.ORIGIN || `http://localhost:3000`;
 
-// parse requests of content-type - application/json
+// var whitelist = ["http://example1.com", "http://example2.com"];
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
+
+// parse requests of content-type - application/jsonss
 app.use(express.json());
-// app.use(cors());
-app.use(
-  cors({
-    origin: ["http://localhost:3000","https://chaat-app.netlify.app"]
-  })
-);
+app.use(cors());
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 // simple route
 
-const uri =
-  "mongodb+srv://chatApp:monjur123@cluster0.pvcyw.mongodb.net/Chat-App?retryWrites=true&w=majority";
-// const uri = 'mongodb://localhost:27017/myapp'
+// const uri =
+//   "mongodb+srv://chatApp:monjur123@cluster0.pvcyw.mongodb.net/Chat-App?retryWrites=true&w=majority";
+const uri = "mongodb://localhost:27017/myapp";
 
 mongoose
   .connect(uri, {
@@ -52,6 +59,7 @@ app.get("/", (req, res) => {
 // route setup
 app.use("/api/auth", userRouter);
 app.use("/api/messages", messageRouter);
+app.use("/api/friends", friendsRouter);
 
 // set port, listen for requests
 
@@ -76,10 +84,10 @@ io.on("connection", (socket) => {
   });
 
   socket.on("send-msg", (data) => {
-      console.log(data, "onkdfkdj");
+    console.log(data, "onkdfkdj");
 
     const sendUserSocket = onlineUsers.get(data.to);
-  
+
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit("msg-recive", data.message);
     }
