@@ -32,18 +32,14 @@ var corsOptions = {
 
 // parse requests of content-type - application/jsonss
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}));
 // simple route
 
-// const uri =
-//   "mongodb+srv://chatApp:monjur123@cluster0.pvcyw.mongodb.net/Chat-App?retryWrites=true&w=majority";
-const uri = "mongodb://localhost:27017/myapp";
+const uri =
+  "mongodb+srv://chatApp:monjur123@cluster0.pvcyw.mongodb.net/Chat-App?retryWrites=true&w=majority";
+// const uri = "mongodb://localhost:27017/myapp";
 
 mongoose
   .connect(uri, {
