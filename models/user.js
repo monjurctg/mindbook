@@ -23,14 +23,17 @@ const userSchema = Schema({
     avatarImage:{
         type:String,
         default:""
-    }
+    },
+    friends: [{ type: Schema.Types.ObjectId, ref: 'Friends'}]
+
+
     // gender: {
     //     type: String,
     //     required:true
     // },
 })
 
-const userModel = mongoose.model('user',userSchema);
+const userModel = mongoose.model('Users',userSchema);
 
 module.exports = userModel
 
