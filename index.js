@@ -19,20 +19,20 @@ const socket = require("socket.io");
 const PORT = process.env.PORT || 5000;
 const ORIGIN = process.env.ORIGIN || `http://localhost:3000`;
 
-// var whitelist = ["http://example1.com", "http://example2.com"];
-// var corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// };
+var whitelist = ["http://localhost:3000", "https://vercel.com/cs-go/mindbook"];
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
 
 // parse requests of content-type - application/jsonss
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}));
 // simple route
