@@ -20,7 +20,12 @@ const ORIGIN = process.env.ORIGIN || `http://localhost:3000`;
 
 // parse requests of content-type - application/json
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 // simple route
