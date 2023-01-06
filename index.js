@@ -32,6 +32,11 @@ var corsOptions = {
 
 // parse requests of content-type - application/jsonss
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({extended: true}));
