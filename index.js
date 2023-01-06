@@ -23,7 +23,7 @@ app.use(express.json());
 // app.use(cors());
 app.use(
   cors({
-    origin: "*",
+    origin: ["http://localhost:3000","https://chaat-app.netlify.app"]
   })
 );
 // parse requests of content-type - application/x-www-form-urlencoded
