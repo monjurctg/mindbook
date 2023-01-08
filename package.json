@@ -2,7 +2,7 @@
   "name": "mindbook",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "dependencies": {
     "abbrev": "^1.1.1",
     "accepts": "^1.3.8",
