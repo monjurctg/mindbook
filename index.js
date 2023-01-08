@@ -74,9 +74,9 @@ const server = app.listen(PORT, () => {
 
 const io = socket(server, {
   cors: {
-    origin: [" https://chaat-app.netlify.app", ORIGIN],
+    origin: "*",
     //',
-    Credential: true,
+    // Credential: true,
   },
 });
 // console.log(io,"io")
