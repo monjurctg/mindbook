@@ -76,7 +76,7 @@ const io = socket(server, {
   cors: {
     origin: "*",
     //',
-    // Credential: true,
+    Credential: true,
   },
 });
 // console.log(io,"io")
