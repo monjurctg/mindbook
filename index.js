@@ -85,14 +85,15 @@ global.onlineUsers = new Map();
 io.on("connection", (socket) => {
   global.chatSchoket = socket;
   socket.on("add-user", (userId) => {
+    console.log(userId, "userid");
     onlineUsers.set(userId, socket.id);
+    console.log(onlineUsers, "onlineUsers");
   });
 
   socket.on("send-msg", (data) => {
-    console.log(data, "onkdfkdj");
+    // console.log(data, "onkdfkdj");
 
     const sendUserSocket = onlineUsers.get(data.to);
-
     if (sendUserSocket) {
       socket.to(sendUserSocket).emit("msg-recive", data.message);
     }
