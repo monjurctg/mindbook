@@ -16,7 +16,7 @@ const socket = require("socket.io");
 
 // const io = new Server(expressServer);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 const ORIGIN = process.env.ORIGIN || `http://localhost:3000`;
 
 var whitelist = ["http://localhost:3000"];
