@@ -73,11 +73,7 @@ const server = app.listen(PORT, () => {
 });
 
 const io = socket(server, {
-  cors: {
-    origin: "*",
-    //',
-    Credential: true,
-  },
+  cors: true
 });
 // console.log(io,"io")
 global.onlineUsers = new Map();
